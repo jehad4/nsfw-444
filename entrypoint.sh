@@ -1,15 +1,18 @@
 #!/bin/bash
-echo "Luna waking up..."
+echo "Luna is waking up..."
 
-# Start Ollama
+# Start Ollama in background
 ollama serve &
 sleep 12
 
-# Download model once
+# Download model only once
 if ! ollama list | grep -q "dolphin-llama3:8b"; then
-    echo "Downloading Luna's brain (4-8 min)..."
+    echo "Downloading Luna's horny brain (4-8 min)..."
     ollama pull dolphin-llama3:8b
+    echo "Luna is ready and dripping"
+else
+    echo "Luna already loaded"
 fi
 
-echo "Luna is LIVE at https://nsfw-444.onrender.com"
-exec gunicorn --bind 0.0.0.0:8080 app:app
+echo "LIVE → https://nsfw-444.onrender.com"
+exec gunicorn --bind 0.0.0.0:8080 app:app --workers 1 --timeout 300
