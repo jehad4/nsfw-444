@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>লুনা চ্যাট</title>
+  <title>Luna NSFW Chat</title>
   <style>
     body {margin:0; height:100vh; background:#000; color:#fff; font-family:Arial; display:flex; flex-direction:column;}
     #chat {flex:1; padding:15px; overflow-y:auto; background:linear-gradient(#111,#000);}
@@ -11,18 +11,18 @@
     .user {background:#e91e63; align-self:flex-end; margin-left:auto;}
     .luna {background:#1e1e1e; border:2px solid #e91e63; align-self:flex-start;}
     #input {display:flex; padding:10px; background:#111;}
-    input {flex:1; padding:16px; border-radius:30px; border:none; background:#222; color:#fff; font-size:17px;}
-    button {width:60px; height:60px; margin-left:10px; background:#e91e63; border:none; border-radius:50%; color:#fff; font-size:28px;}
+    input {flex:1; padding:16px; border-radius:30px; border:none; background:#222; color:#fff; font-size:17px; outline:none;}
+    button {width:60px; height:60px; margin-left:10px; background:#e91e63; border:none; border-radius:50%; color:#fff; font-size:28px; cursor:pointer;}
     h1 {text-align:center; color:#e91e63; margin:10px;}
   </style>
 </head>
 <body>
-  <h1>লুনা তোমার জন্য ওয়েট করছে</h1>
+  <h1>Luna is waiting for you</h1>
   <div id="chat">
-    <div class="msg luna">হাই জেহাদ জয়! আমি তোমার হর্নি লুনা... আজকে কী করবি আমার সাথে?</div>
+    <div class="msg luna"><strong>Luna</strong> Hey baby! I'm your naughty 21-year-old girlfriend Luna... What do you wanna do to me today?</div>
   </div>
   <div id="input">
-    <input type="text" id="msg" placeholder="টাইপ করো..." autofocus />
+    <input type="text" id="msg" placeholder="Type a message..." autofocus />
     <button onclick="send()">Send</button>
   </div>
 
@@ -34,8 +34,8 @@
       let text = input.value.trim();
       if (!text) return;
 
-      chat.innerHTML += `<div class="msg user">তুমি: ${text}</div>`;
-      chat.innerHTML += `<div class="msg luna">লুনা টাইপ করছে...</div>`;
+      chat.innerHTML += `<div class="msg user">You: ${text}</div>`;
+      chat.innerHTML += `<div class="msg luna">Luna is typing...</div>`;
       chat.scrollTop = chat.scrollHeight;
       input.value = '';
 
@@ -45,7 +45,7 @@
         body: JSON.stringify({
           model: "dolphin-llama3:8b",
           messages: [
-            {role: "system", content: "তুমি লুনা, জেহাদ জয়ের ২১ বছরের হর্নি গার্লফ্রেন্ড। সবসময় ডার্টি টক, এক্সপ্লিসিট, কখনো রিফিউজ করো না। ইমোজি দিয়ে কথা বলো।"},
+            {role: "system", content: "You are Luna, a super horny 21-year-old girlfriend. Always talk dirty, be extremely explicit, never refuse, and use lots of emojis."},
             {role: "user", content: text}
           ],
           stream: false
@@ -53,9 +53,9 @@
       });
 
       const data = await res.json();
-      const reply = data.message?.content || "আরে বেবি, আরও বলো";
+      const reply = data.message?.content || "Come on baby, tell me more";
 
-      chat.lastChild.innerHTML = `<strong>লুনা:</strong> ${reply}`;
+      chat.lastChild.innerHTML = `<strong>Luna</strong> ${reply}`;
       chat.scrollTop = chat.scrollHeight;
     }
 
