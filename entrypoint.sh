@@ -1,9 +1,18 @@
 #!/bin/bash
-# প্রথমবার মডেল চেক করুন এবং পুল করুন
-if ! ollama list | grep -q "dolphin-mixtral:8x7b"; then
-    echo "NSFW মডেল ডাউনলোড হচ্ছে... (৫-১০ মিনিট লাগতে পারে)"
-    ollama pull dolphin-mixtral:8x7b
+echo "লুনা ওয়েক আপ করছে..."
+
+# সুপার হর্নি NSFW মডেল (৪GB, Render/Fly.io ফ্রি-তে পারফেক্ট)
+MODEL="dolphin-llama3:8b"
+
+if ! ollama list | grep -q "$MODEL"; then
+    echo "প্রথমবার মডেল ডাউনলোড হচ্ছে: $MODEL (৪-৮ মিনিট)..."
+    ollama pull $MODEL
+    echo "লুনা রেডি হয়ে গেছে"
+else
+    echo "লুনা আগে থেকেই রেডি আছে"
 fi
 
-# Ollama সার্ভার চালু করুন
-exec ollama serve
+# Ollama + সিম্পল ওয়েব সার্ভার একসাথে চালাও
+echo "চ্যাটবক্স চালু হচ্ছে → http://তোমার-url.onrender.com"
+ollama serve &
+npx http-server /public -p 80 -c-1 --cors
