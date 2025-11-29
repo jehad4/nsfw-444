@@ -4,16 +4,19 @@ FROM ollama/ollama:latest
 ENV OLLAMA_HOST=0.0.0.0
 ENV OLLAMA_ORIGINS=*
 
-# entrypoint কপি
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Node.js + http-server ইনস্টল করো (চ্যাটবক্সের জন্য)
+RUN apt-get update && apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g http-server
 
-# ওয়েব চ্যাটবক্স কপি
+# ফাইল কপি
+COPY entrypoint.sh /entrypoint.sh
 COPY public /public
 
-# পোর্ট
-EXPOSE 11434
-EXPOSE 80
+RUN chmod +x /entrypoint.sh
 
-# স্টার্টআপ
+EXPOSE 11434
+EXPOSE 8080
+
 ENTRYPOINT ["/entrypoint.sh"]
