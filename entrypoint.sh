@@ -1,15 +1,21 @@
 #!/bin/bash
 echo "Luna is waking up..."
 
-# Start Ollama in background
-ollama serve &
-sleep 12
+# Start Ollama in background but KEEP IT ALIVE
+nohup ollama serve > /dev/null 2>&1 &
 
-# Download model only once
+# Wait until Ollama is actually listening
+echo "Waiting for Ollama to start..."
+until curl -s http://127.0.0.1:11434 > /dev/null; do
+    sleep 2
+done
+echo "Ollama is ready!"
+
+# Download model once
 if ! ollama list | grep -q "dolphin-llama3:8b"; then
     echo "Downloading Luna's horny brain (4-8 min)..."
     ollama pull dolphin-llama3:8b
-    echo "Luna is ready and dripping"
+    echo "Luna is fully loaded"
 else
     echo "Luna already loaded"
 fi
