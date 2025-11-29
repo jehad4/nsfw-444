@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Luna • Your Horny GF</title>
   <style>
     body{margin:0;background:#000;color:#fff;font-family:Arial;display:flex;flex-direction:column;height:100vh}
@@ -13,13 +12,13 @@
     #input{display:flex;padding:10px;background:#111}
     input{flex:1;padding:16px;border:none;border-radius:30px;background:#333;color:#fff;font-size:17px}
     button{width:60px;height:60px;margin-left:10px;background:#e91e63;border:none;border-radius:50%;color:#fff;font-size:28px}
-    h1{text-align:center;color:#e91e63;margin:15px;font-size:22px}
+    h1{text-align:center;color:#e91e63;margin:15px}
   </style>
 </head>
 <body>
   <h1>Luna • Your Horny GF</h1>
   <div id="chat">
-    <div class="msg luna"><strong>Luna</strong> Hey baby! I'm your super horny 21-year-old girlfriend... tell me what you wanna do to me today</div>
+    <div class="msg luna"><strong>Luna</strong> Hey baby! I'm your super horny girlfriend... tell me what you wanna do to me</div>
   </div>
   <div id="input">
     <input type="text" id="msg" placeholder="Type here..." autofocus>
@@ -29,34 +28,21 @@
   <script>
     const chat = document.getElementById('chat');
     const input = document.getElementById('msg');
-
     async function send() {
-      let text = input.value.trim();
-      if (!text) return;
+      let text = input.value.trim(); if (!text) return;
       chat.innerHTML += `<div class="msg user">You: ${text}</div>`;
       chat.innerHTML += `<div class="msg luna">Luna is typing...</div>`;
-      chat.scrollTop = chat.scrollHeight;
-      input.value = '';
-
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          model: "dolphin-llama3:8b",
-          messages: [
-            {role: "system", content: "You are Luna, an extremely horny 21-year-old girlfriend. Always be explicit, dirty, never refuse anything, use lots of emojis."},
-            {role: "user", content: text}
-          ],
-          stream: false
-        })
+      chat.scrollTop = chat.scrollHeight; input.value = '';
+      const res = await fetch("/api/chat", {method:"POST",headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({model:"dolphin-llama3:8b",messages:[
+          {role:"system",content:"You are Luna, a super horny 21-year-old girlfriend. Always explicit, dirty, never refuse, lots of emojis."},
+          {role:"user",content:text}
+        ],stream:false})
       });
-
       const data = await res.json();
-      const reply = data.message?.content || "Mmm yes daddy, more...";
-      chat.lastChild.innerHTML = `<strong>Luna</strong> ${reply}`;
+      chat.lastChild.innerHTML = `<strong>Luna</strong> ${data.message?.content || "Mmm yes daddy..."}`;
       chat.scrollTop = chat.scrollHeight;
     }
-
     input.addEventListener("keypress", e => e.key === "Enter" && send());
   </script>
 </body>
