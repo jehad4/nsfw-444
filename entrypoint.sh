@@ -1,18 +1,27 @@
 #!/bin/bash
-echo "লুনা ওয়েক আপ করছে..."
+echo "লুনা জেগে উঠছে..."
 
-# সুপার হর্নি NSFW মডেল (৪GB, Render/Fly.io ফ্রি-তে পারফেক্ট)
+# Ollama সার্ভার প্রথমে চালু করো (ব্যাকগ্রাউন্ডে)
+ollama serve &
+OLLAMA_PID=$!
+echo "Ollama সার্ভার চালু হয়েছে (PID: $OLLAMA_PID)"
+
+# ৫ সেকেন্ড ওয়েট করো যাতে সার্ভার রেডি হয়
+sleep 8
+
+# মডেল চেক + পুল
 MODEL="dolphin-llama3:8b"
-
 if ! ollama list | grep -q "$MODEL"; then
-    echo "প্রথমবার মডেল ডাউনলোড হচ্ছে: $MODEL (৪-৮ মিনিট)..."
+    echo "লুনার NSFW ব্রেন ডাউনলোড হচ্ছে: $MODEL (৪-৮ মিনিট)..."
     ollama pull $MODEL
-    echo "লুনা রেডি হয়ে গেছে"
+    echo "লুনা এখন পুরোপুরি হর্নি ও রেডি"
 else
     echo "লুনা আগে থেকেই রেডি আছে"
 fi
 
-# Ollama + সিম্পল ওয়েব সার্ভার একসাথে চালাও
+# চ্যাটবক্স চালু করো পোর্ট ৮০৮০-তে
 echo "চ্যাটবক্স চালু হচ্ছে → http://তোমার-url.onrender.com"
-ollama serve &
-npx http-server /public -p 80 -c-1 --cors
+http-server /public -p 8080 -c-1 --cors &
+
+# Ollama চালু রাখো
+wait $OLLAMA_PID
