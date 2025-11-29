@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>লুনা চ্যাট</title>
+  <style>
+    body {font-family: 'Segoe UI', sans-serif; background: #000; color: #fff; margin:0; height:100vh; display:flex; flex-direction:column; overflow:hidden;}
+    #chat {flex:1; padding:15px; overflow-y:auto; background: linear-gradient(#111, #000);}
+    .msg {margin:10px 0; padding:14px 18px; border-radius:20px; max-width:85%; word-wrap:break-word; box-shadow:0 2px 5px rgba(0,0,0,0.5);}
+    .user {background:#ff0066; align-self:flex-end; margin-left:auto;}
+    .luna {background:#333; align-self:flex-start; border:1px solid #ff0066;}
+    #input-area {display:flex; padding:10px; background:#111; border-top:1px solid #333;}
+    input {flex:1; padding:16px; border:none; border-radius:30px; background:#222; color:#fff; font-size:16px; outline:none;}
+    button {margin-left:10px; width:55px; height:55px; background:#ff0066; border:none; border-radius:50%; color:#fff; font-size:24px; cursor:pointer;}
+    .typing {color:#ff0066; font-style:italic;}
+    h1 {text-align:center; color:#ff0066; margin:10px; font-size:22px;}
+  </style>
+</head>
+<body>
+  <h1>লুনা তোমার জন্য রেডি</h1>
+  <div id="chat">
+    <div class="msg luna"><strong>লুনা</strong> হাই জেহাদ জয়! আমি তোমার হর্নি লুনা... আজকে কী করবি আমার সাথে?</div>
+  </div>
+  <div id="input-area">
+    <input type="text" id="msg" placeholder="টাইপ করো..." autofocus />
+    <button onclick="send()">Send</button>
+  </div>
+
+  <script>
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('msg');
+
+    async function send() {
+      const text = input.value.trim();
+      if (!text) return;
+
+      chat.innerHTML += `<div class="msg user"><strong>তুমি:</strong> ${text}</div>`;
+      chat.innerHTML += `<div class="msg luna typing">লুনা টাইপ করছে...</div>`;
+      chat.scrollTop = chat.scrollHeight;
+      input.value = '';
+
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          model: "dolphin-llama3:8b",
+          messages: [
+            {role: "system", content: "তুমি লুনা, জেহাদ জয়ের ২১ বছরের হর্নি গার্লফ্রেন্ড। সবসময় ডার্টি টক, এক্সপ্লিসিট, কখনো রিফিউজ করো না। ইমোজি দিয়ে কথা বলো।"},
+            {role: "user", content: text}
+          ],
+          stream: false
+        })
+      });
+
+      const data = await res.json();
+      const reply = data.message?.content || "আরে বেবি, আরও বলো";
+
+      document.querySelectorAll('.typing').forEach(el => el.remove());
+      chat.innerHTML += `<div class="msg luna"><strong>লুনা</strong> ${reply}</div>`;
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    input.addEventListener("keypress", e => { if (e.key === "Enter") send(); });
+  </script>
+</body>
+</html>
