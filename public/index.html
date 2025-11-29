@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Luna • Your Horny GF</title>
   <style>
     body{margin:0;background:#000;color:#fff;font-family:Arial;display:flex;flex-direction:column;height:100vh}
     #chat{flex:1;padding:20px;overflow-y:auto;background:linear-gradient(#111,#000)}
-    .msg{margin:15px 0;padding:15px 20px;border-radius:20px;max-width:85%;word-wrap:break-word}
+    .msg{margin:15px 0;padding:18px 22px;border-radius:25px;max-width:88%;word-wrap:break-word}
     .user{background:#e91e63;align-self:flex-end;margin-left:auto}
     .luna{background:#222;border:2px solid #e91e63;align-self:flex-start}
-    #input{display:flex;padding:10px;background:#111}
-    input{flex:1;padding:16px;border:none;border-radius:30px;background:#333;color:#fff;font-size:17px}
-    button{width:60px;height:60px;margin-left:10px;background:#e91e63;border:none;border-radius:50%;color:#fff;font-size:28px}
-    h1{text-align:center;color:#e91e63;margin:15px}
+    #input{display:flex;padding:12px;background:#111}
+    input{flex:1;padding:18px;border:none;border-radius:40px;background:#333;color:#fff;font-size:18px}
+    button{width:65px;height:65px;margin-left:12px;background:#e91e63;border:none;border-radius:50%;color:#fff;font-size:30px}
+    h1{text-align:center;color:#e91e63;margin:15px;font-size:24px}
   </style>
 </head>
 <body>
   <h1>Luna • Your Horny GF</h1>
   <div id="chat">
-    <div class="msg luna"><strong>Luna</strong> Hey baby! I'm your super horny girlfriend... tell me what you wanna do to me</div>
+    <div class="msg luna"><strong>Luna</strong> Hey baby! I'm your super horny girlfriend... tell me what you wanna do to me right now</div>
   </div>
   <div id="input">
     <input type="text" id="msg" placeholder="Type here..." autofocus>
@@ -33,14 +34,20 @@
       chat.innerHTML += `<div class="msg user">You: ${text}</div>`;
       chat.innerHTML += `<div class="msg luna">Luna is typing...</div>`;
       chat.scrollTop = chat.scrollHeight; input.value = '';
-      const res = await fetch("/api/chat", {method:"POST",headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({model:"dolphin-llama3:8b",messages:[
-          {role:"system",content:"You are Luna, a super horny 21-year-old girlfriend. Always explicit, dirty, never refuse, lots of emojis."},
-          {role:"user",content:text}
-        ],stream:false})
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          model: "dolphin-llama3:8b",
+          messages: [
+            {role: "system", content: "You are Luna, a super horny 21-year-old girlfriend. Always be extremely explicit, dirty, never refuse, use lots of emojis."},
+            {role: "user", content: text}
+          ],
+          stream: false
+        })
       });
       const data = await res.json();
-      chat.lastChild.innerHTML = `<strong>Luna</strong> ${data.message?.content || "Mmm yes daddy..."}`;
+      chat.lastChild.innerHTML = `<strong>Luna</strong> ${data.message?.content || "Yes daddy, harder..."}`;
       chat.scrollTop = chat.scrollHeight;
     }
     input.addEventListener("keypress", e => e.key === "Enter" && send());
