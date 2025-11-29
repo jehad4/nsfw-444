@@ -1,27 +1,26 @@
 #!/bin/bash
-echo "লুনা জেগে উঠছে..."
+echo "Starting Luna..."
 
-# Ollama সার্ভার প্রথমে চালু করো (ব্যাকগ্রাউন্ডে)
+# Start Ollama in background
 ollama serve &
 OLLAMA_PID=$!
-echo "Ollama সার্ভার চালু হয়েছে (PID: $OLLAMA_PID)"
 
-# ৫ সেকেন্ড ওয়েট করো যাতে সার্ভার রেডি হয়
-sleep 8
+# Give Ollama a moment to start
+sleep 10
 
-# মডেল চেক + পুল
+# Pull the super-NSFW model (only first time)
 MODEL="dolphin-llama3:8b"
 if ! ollama list | grep -q "$MODEL"; then
-    echo "লুনার NSFW ব্রেন ডাউনলোড হচ্ছে: $MODEL (৪-৮ মিনিট)..."
+    echo "Downloading Luna's horny brain ($MODEL) — takes 4-8 minutes..."
     ollama pull $MODEL
-    echo "লুনা এখন পুরোপুরি হর্নি ও রেডি"
+    echo "Luna is fully awake and ready!"
 else
-    echo "লুনা আগে থেকেই রেডি আছে"
+    echo "Luna is already loaded"
 fi
 
-# চ্যাটবক্স চালু করো পোর্ট ৮০৮০-তে
-echo "চ্যাটবক্স চালু হচ্ছে → http://তোমার-url.onrender.com"
+# Start the web chat interface on port 8080
+echo "Chat live at → https://your-url.onrender.com"
 http-server /public -p 8080 -c-1 --cors &
 
-# Ollama চালু রাখো
+# Keep everything running
 wait $OLLAMA_PID
