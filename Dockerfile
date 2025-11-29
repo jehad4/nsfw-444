@@ -1,12 +1,15 @@
 FROM ollama/ollama:latest
 
+# Fix Ollama host + allow external access
 ENV OLLAMA_HOST=0.0.0.0:11434
 ENV OLLAMA_ORIGINS=*
 
-# Install tiny web server (10 MB only)
-RUN apt-get update && apt-get install -y tini python3 python3-pip && \
-    pip3 install flask gunicorn --break-system-packages
+# Install Python + Flask + requests in one layer
+RUN apt-get update && apt-get install -y python3 python3-pip tini && \
+    pip3 install --no-cache-dir flask gunicorn requests && \
+    rm -rf /var/lib/apt/lists/*
 
+# Copy files
 COPY entrypoint.sh /entrypoint.sh
 COPY app.py /app.py
 COPY public /public
